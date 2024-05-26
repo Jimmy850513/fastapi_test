@@ -5,10 +5,10 @@ from typing import Optional,List
 from SQL_achemy_db_folder import models
 from SQL_achemy_db_folder.database import engine,SessionLocal
 from sqlalchemy.orm import Session
-from passlib.context import CryptContext
+from . import utils
 app = FastAPI()
 
-pwd_context = CryptContext(schemes=["bcrypt"],deprecated="auto")
+
 
 def get_db():
     db =SessionLocal()
@@ -73,7 +73,7 @@ def patch_post_by_id(id:int,data:dict=Body(...),db:Session = Depends(get_db)):
 @app.post("/sqlachemy/user_create/",status_code=status.HTTP_201_CREATED,response_model=UserResponse)
 def create_user(user_input:User,db:Session = Depends(get_db)):
     #hash user password
-    hashed_password = pwd_context.hash(user_input.password)
+    hashed_password = utils.hash(user_input.password)
     user_input.password = hashed_password
     user_account = models.User(**user_input.dict())
     if user_account:
