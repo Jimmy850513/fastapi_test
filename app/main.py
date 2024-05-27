@@ -11,7 +11,7 @@ app = FastAPI()
 class Post(BaseModel):
     title:str
     content:str
-    published:bool = True
+    published:bool 
 
 
 def get_db():
@@ -33,9 +33,8 @@ def get_posts(db:Session = Depends(get_db)):
 
 
 @app.post('/sqlachemy/posts_created/')
-def create_posts(post:dict=Body(...),db:Session = Depends(get_db)):
-    new_post = models.Posts(title=post['title'],content=post['content'],
-                            published=post['published'] if post.get('published') else True)
+def create_posts(post:Post,db:Session = Depends(get_db)):
+    new_post = models.Posts(**post.dict())
     if new_post:
         db.add(new_post)
         db.commit()
@@ -43,4 +42,7 @@ def create_posts(post:dict=Body(...),db:Session = Depends(get_db)):
     else:
         raise HTTPException(status_code=status.HTTP_406_NOT_ACCEPTABLE,detail={"message":"created not successfully"})
     
-        
+@app.get('/sqlachemy/posts_find/')
+def find_post_by_id(id:int,db:Session=Depends(get_db)):
+    pass
+    
