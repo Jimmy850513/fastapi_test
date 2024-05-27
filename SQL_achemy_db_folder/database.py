@@ -4,7 +4,7 @@ from sqlalchemy.orm import sessionmaker
 
 
 
-sql_connect_url = f"""postgresql+psycopg2://dba:open2002@localhost:5439/fast_api_test"""
+sql_connect_url = f"""postgresql+psycopg2://jimmy:home1234@localhost:5432/fast_api_test"""
         
 engine = create_engine(sql_connect_url)
             
